@@ -326,6 +326,7 @@ def train_net(network, imdb, roidb, valroidb, output_dir, tb_dir,
   valroidb = filter_roidb(valroidb)
 
   tfconfig = tf.ConfigProto(allow_soft_placement=True)
+  # tfconfig.gpu_options.per_process_gpu_memory_fraction = 0.01
   tfconfig.gpu_options.allow_growth = True
 
   with tf.Session(config=tfconfig) as sess:
