@@ -86,6 +86,7 @@ class mio_tcd_loc(imdb):
         except:
           image_index = pickle.load(fid, encoding='bytes')
       print('{} image index loaded from {}'.format(self.name, cache_file))
+      print('image_index has length {}'.format(len(image_index)))
       return image_index
 
     # Example path to image set file:
@@ -110,6 +111,8 @@ class mio_tcd_loc(imdb):
           sys.stdout.flush()
     sys.stdout.write("\n")
     sys.stdout.flush() 
+
+    print('image_index has length {}'.format(len(image_index)))
 
     with open(cache_file, 'wb') as fid:
       pickle.dump(image_index, fid, pickle.HIGHEST_PROTOCOL)
@@ -222,7 +225,7 @@ class mio_tcd_loc(imdb):
   def _load_pascal_annotation(self):
     """
     Load image and bounding boxes info from the gt file for the entire dataset
-    in the PASCAL VOC.
+    in the PASCAL VOC format.
     """
 
     L = []

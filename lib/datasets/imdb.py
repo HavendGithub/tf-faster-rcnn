@@ -122,6 +122,7 @@ class imdb(object):
                'flipped': True}
       self.roidb.append(entry)
     self._image_index = self._image_index * 2
+    print('image_index has length {} after appended flipped images'.format(len(self._image_index)))
 
   def evaluate_recall(self, candidate_boxes=None, thresholds=None,
                       area='all', limit=None):

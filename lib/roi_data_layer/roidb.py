@@ -27,6 +27,9 @@ def prepare_roidb(imdb):
   if not (imdb.name.startswith('vg') or imdb.name.startswith('avg') or imdb.name.startswith('coco')):
     sizes = [PIL.Image.open(imdb.image_path_at(i)).size
          for i in range(imdb.num_images)]
+  
+  print('image_index has length {} when preparing training data (func prepare_roidb)'.format(len(imdb.image_index)))
+  counter = 0
   for i in range(len(imdb.image_index)):
     roidb[i]['image'] = imdb.image_path_at(i)
     if not (imdb.name.startswith('vg') or imdb.name.startswith('avg') or imdb.name.startswith('coco')):
@@ -47,3 +50,13 @@ def prepare_roidb(imdb):
     # max overlap > 0 => class should not be zero (must be a fg class)
     nonzero_inds = np.where(max_overlaps > 0)[0]
     assert all(max_classes[nonzero_inds] != 0)
+
+    counter += 1
+    if counter % 100 == 0:
+      sys.stdout.write(".")
+      if counter % 5000 == 0:
+        sys.stdout.write(str(counter/1000)+'k')
+        sys.stdout.write("\n")
+      sys.stdout.flush()
+  sys.stdout.write("\n")
+  sys.stdout.flush() 
