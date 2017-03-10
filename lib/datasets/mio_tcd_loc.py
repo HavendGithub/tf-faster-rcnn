@@ -19,7 +19,7 @@ from model.config import cfg
 import csv
 
 
-class moi_tcd_loc(imdb):
+class mio_tcd_loc(imdb):
   def __init__(self, image_set, devkit_path=None):
     imdb.__init__(self, 'mio-tcd-loc')
 #     self._year = year
@@ -41,7 +41,7 @@ class moi_tcd_loc(imdb):
     self._comp_id = 'comp4'
 
     # PASCAL specific config options
-    # change to MOI-TCD specific config
+    # change to MIO-TCD specific config
     # no 'use_diff' is needed
     self.config = {'cleanup': True,
                    'use_salt': True,
