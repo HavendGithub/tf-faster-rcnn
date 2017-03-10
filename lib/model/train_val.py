@@ -232,7 +232,7 @@ class SolverWrapper(object):
         if self.valroidb is not None:
           blobs_val = self.data_layer_val.forward()
           summary_val = self.net.get_summary(sess, blobs_val)
-        self.valwriter.add_summary(summary_val, float(iter))
+          self.valwriter.add_summary(summary_val, float(iter))
         last_summary_time = now
       else:
         # Compute the graph without summary
