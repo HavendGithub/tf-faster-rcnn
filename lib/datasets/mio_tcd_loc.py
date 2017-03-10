@@ -18,6 +18,7 @@ from .voc_eval import voc_eval
 from model.config import cfg
 
 import csv
+import sys
 
 
 class mio_tcd_loc(imdb):
@@ -51,7 +52,7 @@ class mio_tcd_loc(imdb):
                    'min_size': 2}
 
     assert os.path.exists(self._devkit_path), \
-      'VOCdevkit path does not exist: {}'.format(self._devkit_path)
+      'MIO-TCD parent folder path does not exist: {}'.format(self._devkit_path)
     assert os.path.exists(self._data_path), \
       'Path does not exist: {}'.format(self._data_path)
 
@@ -74,19 +75,46 @@ class mio_tcd_loc(imdb):
 
   def _load_image_set_index(self):
     """
-    Load the indexes listed in this dataset's image set file.
+    Load (and write) the indexes listed in this dataset's image set file.
     """
+
+    cache_file = os.path.join(self.cache_path, self.name + '_image_index.pkl')
+    if os.path.exists(cache_file):
+      with open(cache_file, 'rb') as fid:
+        try:
+          image_index = pickle.load(fid)
+        except:
+          image_index = pickle.load(fid, encoding='bytes')
+      print('{} image index loaded from {}'.format(self.name, cache_file))
+      return image_index
+
     # Example path to image set file:
     # self._devkit_path + /MIO-TCD-Localization/gt_train.csv
     image_set_file = os.path.join(self._data_path, 'gt_train.csv')
     assert os.path.exists(image_set_file), \
       'Path does not exist: {}'.format(image_set_file)
     image_index = []
+    counter = 0
     with open(image_set_file) as csvf:
       freader = csv.reader(csvf, delimiter=',')
       for row in freader:
         if row[0].strip() not in image_index:
           image_index.append(row[0].strip())
+        # print out process
+        counter += 1
+        if counter % 100 == 0:
+          sys.stdout.write(".")
+          if counter % 3000 == 0:
+            sys.stdout.write(str(counter/1000)+'k')
+            sys.stdout.write("\n")
+          sys.stdout.flush()
+    sys.stdout.write("\n")
+    sys.stdout.flush() 
+
+    with open(cache_file, 'wb') as fid:
+      pickle.dump(image_index, fid, pickle.HIGHEST_PROTOCOL)
+    print('wrote image index to {}'.format(cache_file))
+
     return image_index
 
   def _get_default_path(self):
