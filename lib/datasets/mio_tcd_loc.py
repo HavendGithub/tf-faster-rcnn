@@ -20,7 +20,7 @@ import csv
 
 
 class moi_tcd_loc(imdb):
-  def __init__(self, image_set, year, devkit_path=None):
+  def __init__(self, image_set, devkit_path=None):
     imdb.__init__(self, 'mio-tcd-loc')
 #     self._year = year
     self._image_set = image_set
@@ -245,41 +245,41 @@ class moi_tcd_loc(imdb):
 
     return L
 
-  # TODO: verify the use of salt
-  def _get_comp_id(self):
-    comp_id = (self._comp_id + '_' + self._salt if self.config['use_salt']
-               else self._comp_id)
-    return comp_id
+  # # TODO: verify the use of salt
+  # def _get_comp_id(self):
+  #   comp_id = (self._comp_id + '_' + self._salt if self.config['use_salt']
+  #              else self._comp_id)
+  #   return comp_id
 
-  # TODO: verify what is this for and change
-  def _get_voc_results_file_template(self):
-    # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
-    filename = self._get_comp_id() + '_det_' + self._image_set + '_{:s}.txt'
-    path = os.path.join(
-      self._devkit_path,
-      'results',
-      'VOC' + self._year,
-      'Main',
-      filename)
-    return path
+  # # TODO: verify what is this for and change
+  # def _get_voc_results_file_template(self):
+  #   # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
+  #   filename = self._get_comp_id() + '_det_' + self._image_set + '_{:s}.txt'
+  #   path = os.path.join(
+  #     self._devkit_path,
+  #     'results',
+  #     'VOC' + self._year,
+  #     'Main',
+  #     filename)
+  #   return path
 
-  # TODO: verify what is this for
-  def _write_voc_results_file(self, all_boxes):
-    for cls_ind, cls in enumerate(self.classes):
-      if cls == '__background__':
-        continue
-      print('Writing {} VOC results file'.format(cls))
-      filename = self._get_voc_results_file_template().format(cls)
-      with open(filename, 'wt') as f:
-        for im_ind, index in enumerate(self.image_index):
-          dets = all_boxes[cls_ind][im_ind]
-          if dets == []:
-            continue
-          # the VOCdevkit expects 1-based indices
-          for k in range(dets.shape[0]):
-            f.write('{:s} {:.3f} {:.1f} {:.1f} {:.1f} {:.1f}\n'.
-                    format(index, dets[k, -1],
-                           dets[k, 0] + 1, dets[k, 1] + 1,
-                           dets[k, 2] + 1, dets[k, 3] + 1))
+  # # TODO: verify what is this for
+  # def _write_voc_results_file(self, all_boxes):
+  #   for cls_ind, cls in enumerate(self.classes):
+  #     if cls == '__background__':
+  #       continue
+  #     print('Writing {} VOC results file'.format(cls))
+  #     filename = self._get_voc_results_file_template().format(cls)
+  #     with open(filename, 'wt') as f:
+  #       for im_ind, index in enumerate(self.image_index):
+  #         dets = all_boxes[cls_ind][im_ind]
+  #         if dets == []:
+  #           continue
+  #         # the VOCdevkit expects 1-based indices
+  #         for k in range(dets.shape[0]):
+  #           f.write('{:s} {:.3f} {:.1f} {:.1f} {:.1f} {:.1f}\n'.
+  #                   format(index, dets[k, -1],
+  #                          dets[k, 0] + 1, dets[k, 1] + 1,
+  #                          dets[k, 2] + 1, dets[k, 3] + 1))
 
   

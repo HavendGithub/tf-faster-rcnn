@@ -13,6 +13,7 @@ from __future__ import print_function
 __sets = {}
 from datasets.pascal_voc import pascal_voc
 from datasets.coco import coco
+from datasets.mio-tcd-loc import mio-tcd-loc
 
 import numpy as np
 
@@ -33,6 +34,12 @@ for year in ['2015']:
   for split in ['test', 'test-dev']:
     name = 'coco_{}_{}'.format(year, split)
     __sets[name] = (lambda split=split, year=year: coco(split, year))
+
+# Set up mio-tcd-loc
+# TODO: add test
+for split in ['train']:
+  name = 'mio-tcd-loc_{}'.format(split)
+  __sets[name] = (lambda split=split: moi_tcd_loc(split))
 
 
 def get_imdb(name):
