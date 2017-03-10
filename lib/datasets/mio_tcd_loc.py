@@ -91,7 +91,8 @@ class mio_tcd_loc(imdb):
 
     # Example path to image set file:
     # self._devkit_path + /MIO-TCD-Localization/gt_train.csv
-    image_set_file = os.path.join(self._data_path, 'gt_train.csv')
+    # image_set_file = os.path.join(self._data_path, 'gt_train.csv')
+    image_set_file = os.path.join(self._data_path, 'partial_gt_train.csv')
     assert os.path.exists(image_set_file), \
       'Path does not exist: {}'.format(image_set_file)
     image_index = []
