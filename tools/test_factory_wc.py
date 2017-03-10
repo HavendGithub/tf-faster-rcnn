@@ -1,4 +1,5 @@
 import _init_paths
+from model.train_val import get_training_roidb
 from datasets.factory import get_imdb
 from model.config import cfg, cfg_from_file, cfg_from_list, get_output_dir, get_output_tb_dir
 
@@ -35,6 +36,7 @@ if __name__ == "__main__":
   # imdb = get_imdb('mio_tcd_loc_train')
   # print('Loaded dataset `{:s}` for training'.format(imdb.name))
 
+  # TODO: may need to look more closely at roi_data_layer.roidb
   imdb, roidb = combined_roidb('mio_tcd_loc_train')
   print('{:d} roidb entries'.format(len(roidb)))
 
