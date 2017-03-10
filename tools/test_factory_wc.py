@@ -35,9 +35,9 @@ if __name__ == "__main__":
   imdb = get_imdb('mio_tcd_loc_train')
   print('Loaded dataset `{:s}` for training'.format(imdb.name))
 
-  # imdb, roidb = combined_roidb('mio_tcd_loc_train')
-  # print('{:d} roidb entries'.format(len(roidb)))
+  imdb, roidb = combined_roidb('mio_tcd_loc_train')
+  print('{:d} roidb entries'.format(len(roidb)))
 
-  # # output directory where the models are saved
-  # output_dir = get_output_dir(imdb, None)
-  # print('Output will be saved to `{:s}`'.format(output_dir))
+  # output directory where the models are saved
+  output_dir = get_output_dir(imdb, None)
+  print('Output will be saved to `{:s}`'.format(output_dir))

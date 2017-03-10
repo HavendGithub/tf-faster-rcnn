@@ -104,7 +104,7 @@ class mio_tcd_loc(imdb):
         counter += 1
         if counter % 100 == 0:
           sys.stdout.write(".")
-          if counter % 3000 == 0:
+          if counter % 5000 == 0:
             sys.stdout.write(str(counter/1000)+'k')
             sys.stdout.write("\n")
           sys.stdout.flush()
