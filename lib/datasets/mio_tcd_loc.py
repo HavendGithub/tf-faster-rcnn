@@ -20,6 +20,8 @@ from model.config import cfg
 import csv
 import sys
 
+# ANNO_FILE = 'gt_train.csv'
+ANNO_FILE = 'partial_gt_train.csv'
 
 class mio_tcd_loc(imdb):
   def __init__(self, image_set, devkit_path=None):
@@ -91,8 +93,7 @@ class mio_tcd_loc(imdb):
 
     # Example path to image set file:
     # self._devkit_path + /MIO-TCD-Localization/gt_train.csv
-    # image_set_file = os.path.join(self._data_path, 'gt_train.csv')
-    image_set_file = os.path.join(self._data_path, 'partial_gt_train.csv')
+    image_set_file = os.path.join(self._data_path, ANNO_FILE)
     assert os.path.exists(image_set_file), \
       'Path does not exist: {}'.format(image_set_file)
     image_index = []
@@ -232,7 +233,7 @@ class mio_tcd_loc(imdb):
     L = []
 
     # Load object bounding boxes into a data frame.
-    anno_file = os.path.join(self._data_path, 'gt_train.csv')
+    anno_file = os.path.join(self._data_path, ANNO_FILE)
     assert os.path.exists(anno_file), \
       'Path does not exist: {}'.format(anno_file)
     counter = 0
