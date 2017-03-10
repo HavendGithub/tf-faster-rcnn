@@ -1,3 +1,5 @@
+
+"""" Loading MIO-TCD database. """
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -21,7 +23,7 @@ import csv
 
 class mio_tcd_loc(imdb):
   def __init__(self, image_set, devkit_path=None):
-    imdb.__init__(self, 'mio-tcd-loc')
+    imdb.__init__(self, 'mio_tcd_loc')
 #     self._year = year
     self._image_set = image_set
     self._devkit_path = self._get_default_path() if devkit_path is None \
