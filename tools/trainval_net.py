@@ -117,8 +117,11 @@ if __name__ == '__main__':
   # also add the validation set, but with no flipping images
   orgflip = cfg.TRAIN.USE_FLIPPED
   cfg.TRAIN.USE_FLIPPED = False
-  _, valroidb = combined_roidb(args.imdbval_name)
-  print('{:d} validation roidb entries'.format(len(valroidb)))
+  if args.imdbval_name == "":
+    valroidb = None
+  else:
+    _, valroidb = combined_roidb(args.imdbval_name)
+    print('{:d} validation roidb entries'.format(len(valroidb)))
   cfg.TRAIN.USE_FLIPPED = orgflip
   if args.net == 'vgg16':
     net = vgg16(batch_size=cfg.TRAIN.IMS_PER_BATCH)

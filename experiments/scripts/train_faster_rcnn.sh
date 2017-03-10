@@ -33,6 +33,12 @@ case ${DATASET} in
     STEPSIZE=350000
     ITERS=490000
     ;;
+  mio-tcd-loc)
+    TRAIN_IMDB="mio_tcd_loc_train"
+    TEST_IMDB=""
+    STEPSIZE=350000
+    ITERS=490000
+    ;;
   *)
     echo "No dataset given"
     exit

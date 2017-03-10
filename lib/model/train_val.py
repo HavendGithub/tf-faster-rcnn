@@ -66,10 +66,11 @@ class SolverWrapper(object):
     cur = self.data_layer._cur
     # current shuffled indeces of the database
     perm = self.data_layer._perm
-    # current position in the validation database
-    cur_val = self.data_layer_val._cur
-    # current shuffled indeces of the validation database
-    perm_val = self.data_layer_val._perm
+    if self.valroidb is not None:
+      # current position in the validation database
+      cur_val = self.data_layer_val._cur
+      # current shuffled indeces of the validation database
+      perm_val = self.data_layer_val._perm
 
     # Dump the meta info
     with open(nfilename, 'wb') as fid:
@@ -96,7 +97,8 @@ class SolverWrapper(object):
   def train_model(self, sess, max_iters):
     # Build data layers for both training and validation set
     self.data_layer = RoIDataLayer(self.roidb, self.imdb.num_classes)
-    self.data_layer_val = RoIDataLayer(self.valroidb, self.imdb.num_classes, random=True)
+    if self.valroidb is not None:
+      self.data_layer_val = RoIDataLayer(self.valroidb, self.imdb.num_classes, random=True)
 
     # Determine different scales for anchors, see paper
     if self.imdb.name.startswith('voc'):
@@ -198,8 +200,9 @@ class SolverWrapper(object):
         np.random.set_state(st0)
         self.data_layer._cur = cur
         self.data_layer._perm = perm
-        self.data_layer_val._cur = cur_val
-        self.data_layer_val._perm = perm_val
+        if self.valroidb is not None:
+          self.data_layer_val._cur = cur_val
+          self.data_layer_val._perm = perm_val
 
         # Set the learning rate, only reduce once
         if last_snapshot_iter >= cfg.TRAIN.STEPSIZE:
@@ -226,8 +229,9 @@ class SolverWrapper(object):
           self.net.train_step_with_summary(sess, blobs, train_op)
         self.writer.add_summary(summary, float(iter))
         # Also check the summary on the validation set
-        blobs_val = self.data_layer_val.forward()
-        summary_val = self.net.get_summary(sess, blobs_val)
+        if self.valroidb is not None:
+          blobs_val = self.data_layer_val.forward()
+          summary_val = self.net.get_summary(sess, blobs_val)
         self.valwriter.add_summary(summary_val, float(iter))
         last_summary_time = now
       else:
@@ -325,7 +329,8 @@ def train_net(network, imdb, roidb, valroidb, output_dir, tb_dir,
               max_iters=40000):
   """Train a Fast R-CNN network."""
   roidb = filter_roidb(roidb)
-  valroidb = filter_roidb(valroidb)
+  if valroidb is not None:
+    valroidb = filter_roidb(valroidb)
 
   tfconfig = tf.ConfigProto(allow_soft_placement=True)
   # tfconfig.gpu_options.per_process_gpu_memory_fraction = 0.01
