@@ -117,7 +117,7 @@ if __name__ == '__main__':
   # also add the validation set, but with no flipping images
   orgflip = cfg.TRAIN.USE_FLIPPED
   cfg.TRAIN.USE_FLIPPED = False
-  if args.imdbval_name == "":
+  if args.imdbval_name == "None":
     valroidb = None
   else:
     _, valroidb = combined_roidb(args.imdbval_name)

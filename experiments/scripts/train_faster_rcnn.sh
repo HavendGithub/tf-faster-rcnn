@@ -35,7 +35,7 @@ case ${DATASET} in
     ;;
   mio-tcd-loc)
     TRAIN_IMDB="mio_tcd_loc_train"
-    TEST_IMDB=""
+    TEST_IMDB="None"
     STEPSIZE=350000
     ITERS=490000
     ;;
