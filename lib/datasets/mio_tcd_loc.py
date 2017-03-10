@@ -1,95 +1,93 @@
-# coding: utf8
-
 """" Loading MIO-TCD database. """
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os
-from datasets.imdb import imdb
-import datasets.ds_utils as ds_utils
-import xml.etree.ElementTree as ET
-import numpy as np
-import scipy.sparse
-import scipy.io as sio
-import utils.cython_bbox
-import pickle
-import subprocess
-import uuid
-from .voc_eval import voc_eval
-from model.config import cfg
+import os
+from datasets.imdb import imdb
+import datasets.ds_utils as ds_utils
+import xml.etree.ElementTree as ET
+import numpy as np
+import scipy.sparse
+import scipy.io as sio
+import utils.cython_bbox
+import pickle
+import subprocess
+import uuid
+from .voc_eval import voc_eval
+from model.config import cfg
 
-import csv
+import csv
 
 
-class mio_tcd_loc(imdb):
-  def __init__(self, image_set, devkit_path=None):
-    imdb.__init__(self, 'mio_tcd_loc')
-#     self._year = year
-    self._image_set = image_set
-    self._devkit_path = self._get_default_path() if devkit_path is None \
-      else devkit_path
-    self._data_path = os.path.join(self._devkit_path, 'MIO-TCD-Localization')
-    self._classes = ('__background__',  # always index 0
-                     'articulated_truck', 'bicycle', 'bus', 'car',
-                     'motorcycle', 'motorized_vehicle', 
-                     'non-motorized_vehicle', 'pedestrian', 'pickup_truck',
-                     'single_unit_truck', 'work_van')
-    self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
-    self._image_ext = '.jpg'
-    self._image_index = self._load_image_set_index()
-    # Default to roidb handler
-    self._roidb_handler = self.selective_search_roidb
-    self._salt = str(uuid.uuid4())
-    self._comp_id = 'comp4'
+class mio_tcd_loc(imdb):
+  def __init__(self, image_set, devkit_path=None):
+    imdb.__init__(self, 'mio_tcd_loc')
+#     self._year = year
+    self._image_set = image_set
+    self._devkit_path = self._get_default_path() if devkit_path is None \
+      else devkit_path
+    self._data_path = os.path.join(self._devkit_path, 'MIO-TCD-Localization')
+    self._classes = ('__background__',  # always index 0
+                     'articulated_truck', 'bicycle', 'bus', 'car',
+                     'motorcycle', 'motorized_vehicle', 
+                     'non-motorized_vehicle', 'pedestrian', 'pickup_truck',
+                     'single_unit_truck', 'work_van')
+    self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
+    self._image_ext = '.jpg'
+    self._image_index = self._load_image_set_index()
+    # Default to roidb handler
+    self._roidb_handler = self.selective_search_roidb
+    self._salt = str(uuid.uuid4())
+    self._comp_id = 'comp4'
 
-    # PASCAL specific config options
+    # PASCAL specific config options
     # change to MIO-TCD specific config
     # no 'use_diff' is needed
-    self.config = {'cleanup': True,
-                   'use_salt': True,
-                   'matlab_eval': False,
-                   'rpn_file': None,
-                   'min_size': 2}
+    self.config = {'cleanup': True,
+                   'use_salt': True,
+                   'matlab_eval': False,
+                   'rpn_file': None,
+                   'min_size': 2}
 
-    assert os.path.exists(self._devkit_path), \
-      'VOCdevkit path does not exist: {}'.format(self._devkit_path)
-    assert os.path.exists(self._data_path), \
-      'Path does not exist: {}'.format(self._data_path)
+    assert os.path.exists(self._devkit_path), \
+      'VOCdevkit path does not exist: {}'.format(self._devkit_path)
+    assert os.path.exists(self._data_path), \
+      'Path does not exist: {}'.format(self._data_path)
 
-  def image_path_at(self, i):
-    """
-    Return the absolute path to image i in the image sequence.
-    """
-    return self.image_path_from_index(self._image_index[i])
+  def image_path_at(self, i):
+    """
+    Return the absolute path to image i in the image sequence.
+    """
+    return self.image_path_from_index(self._image_index[i])
 
-  def image_path_from_index(self, index):
-    """
-    Construct an image path from the image's "index" identifier.
-    """
+  def image_path_from_index(self, index):
+    """
+    Construct an image path from the image's "index" identifier.
+    """
     # TODO: might need to adjust for testing
-    image_path = os.path.join(self._data_path, 'train',
-                              index + self._image_ext)
-    assert os.path.exists(image_path), \
-      'Path does not exist: {}'.format(image_path)
-    return image_path
+    image_path = os.path.join(self._data_path, 'train',
+                              index + self._image_ext)
+    assert os.path.exists(image_path), \
+      'Path does not exist: {}'.format(image_path)
+    return image_path
 
-  def _load_image_set_index(self):
-    """
-    Load the indexes listed in this dataset's image set file.
-    """
-    # Example path to image set file:
-    # self._devkit_path + /MIO-TCD-Localization/gt_train.csv
-    image_set_file = os.path.join(self._data_path, 'gt_train.csv')
-    assert os.path.exists(image_set_file), \
-      'Path does not exist: {}'.format(image_set_file)
-    image_index = []
-    with open(image_set_file) as csvf:
+  def _load_image_set_index(self):
+    """
+    Load the indexes listed in this dataset's image set file.
+    """
+    # Example path to image set file:
+    # self._devkit_path + /MIO-TCD-Localization/gt_train.csv
+    image_set_file = os.path.join(self._data_path, 'gt_train.csv')
+    assert os.path.exists(image_set_file), \
+      'Path does not exist: {}'.format(image_set_file)
+    image_index = []
+    with open(image_set_file) as csvf:
       freader = csv.reader(csvf, delimiter=',')
       for row in freader:
         if row[0].strip() not in image_index:
           image_index.append(row[0].strip())
-    return image_index
+    return image_index
 
   def _get_default_path(self):
     """
@@ -202,10 +200,10 @@ class mio_tcd_loc(imdb):
     L = []
 
     # Load object bounding boxes into a data frame.
-    anno_file = os.path.join(self._data_path, 'gt_train.csv')
-    assert os.path.exists(anno_file), \
-      'Path does not exist: {}'.format(anno_file)
-    with open(anno_file) as csvf:
+    anno_file = os.path.join(self._data_path, 'gt_train.csv')
+    assert os.path.exists(anno_file), \
+      'Path does not exist: {}'.format(anno_file)
+    with open(anno_file) as csvf:
       freader = csv.reader(csvf, delimiter=',')
       last_image = ''
       for ix, row in enumerate(freader):
