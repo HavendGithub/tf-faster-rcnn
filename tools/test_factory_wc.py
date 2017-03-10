@@ -36,6 +36,8 @@ if __name__ == "__main__":
   # imdb = get_imdb('mio_tcd_loc_train')
   # print('Loaded dataset `{:s}` for training'.format(imdb.name))
 
+  cfg.TRAIN.PROPOSAL_METHOD = 'gt'
+
   # TODO: may need to look more closely at roi_data_layer.roidb
   imdb, roidb = combined_roidb('mio_tcd_loc_train')
   print('{:d} roidb entries'.format(len(roidb)))
