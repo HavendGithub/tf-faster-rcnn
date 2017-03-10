@@ -16,6 +16,8 @@ from model.bbox_transform import bbox_transform
 from utils.cython_bbox import bbox_overlaps
 import PIL
 
+import sys
+
 def prepare_roidb(imdb):
   """Enrich the imdb's roidb by adding some derived quantities that
   are useful for training. This function precomputes the maximum

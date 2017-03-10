@@ -267,6 +267,8 @@ class mio_tcd_loc(imdb):
         overlaps = np.vstack((overlaps, overlap))
         seg_areas_L.append((x2 - x1 + 1) * (y2 - y1 + 1))
 
+        last_image = row[0].strip()
+
         # processing feedback
         counter += 1
         if counter % 100 == 0:
