@@ -32,8 +32,8 @@ if __name__ == "__main__":
   imdb = get_imdb('voc_2007_trainval')
   print('Loaded dataset `{:s}` for training'.format(imdb.name))
 
-  imdb = get_imdb('mio_tcd_loc_train')
-  print('Loaded dataset `{:s}` for training'.format(imdb.name))
+  # imdb = get_imdb('mio_tcd_loc_train')
+  # print('Loaded dataset `{:s}` for training'.format(imdb.name))
 
   imdb, roidb = combined_roidb('mio_tcd_loc_train')
   print('{:d} roidb entries'.format(len(roidb)))

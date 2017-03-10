@@ -231,6 +231,7 @@ class mio_tcd_loc(imdb):
     anno_file = os.path.join(self._data_path, 'gt_train.csv')
     assert os.path.exists(anno_file), \
       'Path does not exist: {}'.format(anno_file)
+    counter = 0
     with open(anno_file) as csvf:
       freader = csv.reader(csvf, delimiter=',')
       last_image = ''
@@ -262,6 +263,17 @@ class mio_tcd_loc(imdb):
         overlap[0, cls] = 1.0
         overlaps = np.vstack((overlaps, overlap))
         seg_areas_L.append((x2 - x1 + 1) * (y2 - y1 + 1))
+
+        # processing feedback
+        counter += 1
+        if counter % 100 == 0:
+          sys.stdout.write(".")
+          if counter % 5000 == 0:
+            sys.stdout.write(str(counter/1000)+'k')
+            sys.stdout.write("\n")
+          sys.stdout.flush()
+      sys.stdout.write("\n")
+      sys.stdout.flush() 
 
       gt_classes = np.array(gt_classes_L, dtype=np.int32)
       seg_areas = np.array(seg_areas_L, dtype=np.int32)
