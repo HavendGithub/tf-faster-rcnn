@@ -77,8 +77,9 @@ class SolverWrapper(object):
       pickle.dump(st0, fid, pickle.HIGHEST_PROTOCOL)
       pickle.dump(cur, fid, pickle.HIGHEST_PROTOCOL)
       pickle.dump(perm, fid, pickle.HIGHEST_PROTOCOL)
-      pickle.dump(cur_val, fid, pickle.HIGHEST_PROTOCOL)
-      pickle.dump(perm_val, fid, pickle.HIGHEST_PROTOCOL)
+      if self.valroidb is not None:
+        pickle.dump(cur_val, fid, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(perm_val, fid, pickle.HIGHEST_PROTOCOL)
       pickle.dump(iter, fid, pickle.HIGHEST_PROTOCOL)
 
     return filename, nfilename
@@ -193,8 +194,9 @@ class SolverWrapper(object):
         st0 = pickle.load(fid)
         cur = pickle.load(fid)
         perm = pickle.load(fid)
-        cur_val = pickle.load(fid)
-        perm_val = pickle.load(fid)
+        if self.valroidb is not None:
+          cur_val = pickle.load(fid)
+          perm_val = pickle.load(fid)
         last_snapshot_iter = pickle.load(fid)
 
         np.random.set_state(st0)
