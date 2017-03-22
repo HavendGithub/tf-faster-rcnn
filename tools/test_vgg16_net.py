@@ -85,6 +85,8 @@ if __name__ == '__main__':
   else:
     anchors = [4, 8, 16, 32]
 
+  print 'pass here!'
+
   net.create_architecture(sess, "TEST", imdb.num_classes, caffe_weight_path=args.weight, 
                           tag='default', anchor_scales=anchors)
 
