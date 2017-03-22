@@ -65,6 +65,8 @@ if __name__ == '__main__':
   else:
     filename = os.path.splitext(os.path.basename(args.weight))[0]
 
+  print 'pass here'
+
   tag = args.tag
   tag = tag if tag else 'default'
   filename = tag + '/' + filename
@@ -74,6 +76,8 @@ if __name__ == '__main__':
 
   tfconfig = tf.ConfigProto(allow_soft_placement=True)
   tfconfig.gpu_options.allow_growth=True
+
+  print 'pass here'
 
   # init session
   sess = tf.Session(config=tfconfig)
