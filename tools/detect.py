@@ -35,6 +35,9 @@ def parse_args():
   parser.add_argument('--num_dets', dest='max_per_image',
             help='max number of detections per image',
             default=100, type=int)
+  parser.add_argument('--imgfolder', dest='img_folder',
+            help='images to apply detection on', default=None,
+            type=str)
   parser.add_argument('--tag', dest='tag',
                         help='tag of the model',
                         default='', type=str)
@@ -44,9 +47,7 @@ def parse_args():
   parser.add_argument('--set', dest='set_cfgs',
                         help='set config keys', default=None,
                         nargs=argparse.REMAINDER)
-  parser.add_argument('--imgfolder', dest='img_folder',
-                        help='images to apply detection on', default=None,
-                        type=str)
+  
 
   if len(sys.argv) == 1:
     parser.print_help()
