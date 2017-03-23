@@ -261,13 +261,14 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
     # Display the image
     ax.imshow(im)  
 
-    # # Create a Rectangle patches
-    # for annot in detections[img]:
-    #   bbox = annot['bbox']
-    #   rect = patches.Rectangle((bbox[0],bbox[1]),bbox[2]-bbox[0],bbox[3]-bbox[1],linewidth=1,edgecolor='r',facecolor='none')
-    #   ax.text(bbox[0], bbox[1], annot['name'], fontdict=font)
-    #   # Add the patch to the Axes
-    #   ax.add_patch(rect)    
+    # Create a Rectangle patches
+    for j in range(1, imdb.num_classes):
+      for det in all_boxes[j][i]:
+        bbox = det[:4]
+        rect = patches.Rectangle((bbox[0],bbox[1]),bbox[2]-bbox[0],bbox[3]-bbox[1],linewidth=1,edgecolor='r',facecolor='none')
+        ax.text(bbox[0], bbox[1], imdb._classes[j]+':'+det[4], fontdict=font)
+        # Add the patch to the Axes
+        ax.add_patch(rect)    
 
     plt.show()
     
