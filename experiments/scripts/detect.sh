@@ -57,8 +57,9 @@ if [[ ! -z  ${EXTRA_ARGS_SLUG}  ]]; then
     --cfg experiments/cfgs/${NET}.yml \
     --tag ${EXTRA_ARGS_SLUG} \
     --net ${NET} \
-    --set ${EXTRA_ARGS} \
-    --imgfolder ${IMGFOLDER}
+    --imgfolder ${IMGFOLDER} \
+    --set ${EXTRA_ARGS}
+
 else
   CUDA_VISIBLE_DEVICES=${GPU_ID} time python ./tools/detect.py \
     --imdb ${TEST_IMDB} \
@@ -66,6 +67,7 @@ else
     --model ${NET_FINAL} \
     --cfg experiments/cfgs/${NET}.yml \
     --net ${NET} \
-    --set ${EXTRA_ARGS} \
-    --imgfolder ${IMGFOLDER}
+    --imgfolder ${IMGFOLDER} \
+    --set ${EXTRA_ARGS}
+    
 fi
