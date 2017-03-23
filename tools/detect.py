@@ -46,7 +46,7 @@ def parse_args():
                         nargs=argparse.REMAINDER)
   parser.add_argument('--imgfolder', dest='img_folder',
                         help='images to apply detection on', default=None,
-                        tyep=str)
+                        type=str)
 
   if len(sys.argv) == 1:
     parser.print_help()
