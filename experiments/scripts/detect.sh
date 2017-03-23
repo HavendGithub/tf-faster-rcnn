@@ -66,6 +66,6 @@ else
     --model ${NET_FINAL} \
     --cfg experiments/cfgs/${NET}.yml \
     --net ${NET} \
-    --set ${EXTRA_ARGS}
+    --set ${EXTRA_ARGS} \
     --imgfolder ${IMGFOLDER}
 fi
