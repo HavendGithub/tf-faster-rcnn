@@ -331,3 +331,12 @@ class mio_tcd_loc(imdb):
   #                          dets[k, 2] + 1, dets[k, 3] + 1))
 
   
+  # TODO: other functions ...
+
+  def competition_mode(self, on):
+    if on:
+      self.config['use_salt'] = False
+      self.config['cleanup'] = False
+    else:
+      self.config['use_salt'] = True
+      self.config['cleanup'] = True

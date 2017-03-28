@@ -31,6 +31,13 @@ case ${DATASET} in
     TEST_IMDB="coco_2014_minival"
     ITERS=490000
     ;;
+  mio-tcd-loc)
+    TRAIN_IMDB="mio_tcd_loc_train"
+    # use train to visualize for now
+    # TODO: need to implement test
+    TEST_IMDB="mio_tcd_loc_train"
+    ITERS=490000
+    ;;
   *)
     echo "No dataset given"
     exit
