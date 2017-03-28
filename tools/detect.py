@@ -113,6 +113,6 @@ if __name__ == '__main__':
     sess.run(tf.global_variables_initializer())
     print('Loaded.')
 
-  realtime_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image)
+  realtime_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5)
 
   sess.close()
