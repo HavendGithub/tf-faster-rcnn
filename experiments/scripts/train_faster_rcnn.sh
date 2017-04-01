@@ -41,7 +41,7 @@ case ${DATASET} in
     ;;
   deep-fashion-general)
     TRAIN_IMDB="deep_fashion_general_train"
-    TEST_IMDB="deep_fashion_general_test"
+    TEST_IMDB="None"
     STEPSIZE=350000
     ITERS=490000
     ;;
