@@ -41,6 +41,11 @@ for split in ['train']:
   name = 'mio_tcd_loc_{}'.format(split)
   __sets[name] = (lambda split=split: mio_tcd_loc(split))
 
+# Set up deep_fashion_general
+for split in ['train']:
+  name = 'deep_fashion_general_{}'.format(split)
+  __sets[name] = (lambda split=split: deep_fashion_general(split))
+
 
 def get_imdb(name):
   """Get an imdb (image database) by name."""
