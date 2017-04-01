@@ -244,7 +244,7 @@ class deep_fashion_general(imdb):
     anno_file = os.path.join(self._data_path, ANNO_FILE)
     assert os.path.exists(anno_file), \
       'Path does not exist: {}'.format(anno_file)
-    with open(image_set_file, 'r') as f:
+    with open(anno_file, 'r') as f:
       image_bbox_list = f.readlines()
     image_bbox_list = image_bbox_list[2:]
     counter = 0

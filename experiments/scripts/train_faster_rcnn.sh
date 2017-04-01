@@ -39,6 +39,12 @@ case ${DATASET} in
     STEPSIZE=350000
     ITERS=490000
     ;;
+  deep-fashion-general)
+    TRAIN_IMDB="deep_fashion_general_train"
+    TEST_IMDB="deep_fashion_general_test"
+    STEPSIZE=350000
+    ITERS=490000
+    ;;
   *)
     echo "No dataset given"
     exit
