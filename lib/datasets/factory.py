@@ -14,6 +14,7 @@ __sets = {}
 from datasets.pascal_voc import pascal_voc
 from datasets.coco import coco
 from datasets.mio_tcd_loc import mio_tcd_loc
+from datasets.deep_fashion_general import deep_fashion_general
 
 import numpy as np
 
