@@ -259,6 +259,7 @@ class deep_fashion_general(imdb):
       bbox = bbox.reshape((1,4))
       overlap =  np.zeros((1, self.num_classes), dtype=np.float32)
       overlap[0, 1] = 1.0
+      overlap = scipy.sparse.csr_matrix(overlap)
       seg_area = np.array([(x2 - x1 + 1) * (y2 - y1 + 1)], dtype=np.int32)
       L.append({'boxes': bbox,
                 'gt_classes': np.array([1], dtype=np.int32),
