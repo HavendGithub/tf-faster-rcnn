@@ -38,6 +38,12 @@ case ${DATASET} in
     TEST_IMDB="mio_tcd_loc_train"
     ITERS=490000
     ;;
+  deep-fashion-general)
+    TRAIN_IMDB="deep_fashion_general_train"
+    # use train to visualize for now
+    # TODO: need to implement test
+    TEST_IMDB="deep_fashion_general_train"
+    ITERS=70000
   *)
     echo "No dataset given"
     exit
