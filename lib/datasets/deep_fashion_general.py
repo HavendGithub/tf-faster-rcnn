@@ -24,7 +24,7 @@ ANNO_FILE = 'Anno/list_bbox.txt'
 
 class deep_fashion_general(imdb):
   def __init__(self, image_set, devkit_path=None):
-    imdb.__init__(self, 'deep_fashion_general')
+    imdb.__init__(self, 'deep_fashion_general_'+image_set)
 #     self._year = year
     self._image_set = image_set
     self._devkit_path = self._get_default_path() if devkit_path is None \
