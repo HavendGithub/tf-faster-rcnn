@@ -44,6 +44,7 @@ case ${DATASET} in
     # TODO: need to implement test
     TEST_IMDB="deep_fashion_general_train"
     ITERS=70000
+    ;;
   *)
     echo "No dataset given"
     exit
