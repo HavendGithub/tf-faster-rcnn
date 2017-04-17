@@ -207,6 +207,9 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
 
   # set the image length to be number of images in the folder
   imgfiles = [join(image_folder, f) for f in listdir(image_folder) if (isfile(join(image_folder, f)) and f[-3:]=='jpg')]
+  if visualization=='false':
+    os.makedirs(image_folder+'_detected')
+    savefiles = [join(image_folder+'_detected', f) for f in listdir(image_folder) if (isfile(join(image_folder, f)) and f[-3:]=='jpg')]
   num_images = len(imgfiles)
 
   # all detections are collected into:
@@ -274,6 +277,8 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
       plt.show()
       
       raw_input("Press Enter to continue to the next image...")
+    else:
+      plt.savefig(savefiles[i])
     
     plt.close()
 
