@@ -10,10 +10,26 @@ DATASET=$2
 NET=$3
 IMGFOLDER=$4
 
+if [ "$#" < 4 ]; then
+    echo "Illegal number of parameters"
+fi
+
 array=( $@ )
 len=${#array[@]}
 EXTRA_ARGS=${array[@]:4:$len}
 EXTRA_ARGS_SLUG=${EXTRA_ARGS// /_}
+VIS=false
+
+for i in "$@"
+do
+case $i in
+  -vis)
+    VIS=true
+    ;;
+  *)
+    ;;
+esac
+done
 
 case ${DATASET} in
   pascal_voc)
@@ -72,6 +88,7 @@ if [[ ! -z  ${EXTRA_ARGS_SLUG}  ]]; then
     --tag ${EXTRA_ARGS_SLUG} \
     --net ${NET} \
     --imgfolder ${IMGFOLDER} \
+    --vis ${VIS} \
     --set ${EXTRA_ARGS}
 
 else
@@ -82,6 +99,7 @@ else
     --cfg experiments/cfgs/${NET}.yml \
     --net ${NET} \
     --imgfolder ${IMGFOLDER} \
+    --vis ${VIS} \
     --set ${EXTRA_ARGS}
     
 fi

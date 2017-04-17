@@ -201,7 +201,7 @@ def test_net(sess, net, imdb, weights_filename, max_per_image=100, thresh=0.05):
   imdb.evaluate_detections(all_boxes, output_dir)
 
 
-def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_image=100, thresh=0.05):
+def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_image=100, thresh=0.05, visualization='false'):
   np.random.seed(cfg.RNG_SEED)
   """Test a Fast R-CNN network on an image database."""
 
