@@ -11,7 +11,8 @@ NET=$3
 IMGFOLDER=$4
 
 if [ "$#" -lt 4 ]; then
-    echo "Illegal number of parameters"
+    echo "Illegal input! Proper input format: detect.sh GPU_ID DATASET_NAME NET IMGFOLDER [-vis]"
+    exit 1
 fi
 
 array=( $@ )
