@@ -9,28 +9,31 @@ GPU_ID=$1
 DATASET=$2
 NET=$3
 IMGFOLDER=$4
+VIS=false
 
 if [ "$#" -lt 4 ]; then
     echo "Illegal input! Proper input format: detect.sh GPU_ID DATASET_NAME NET IMGFOLDER [-vis]"
     exit 1
 fi
 
-array=( $@ )
-len=${#array[@]}
-EXTRA_ARGS=${array[@]:4:$len}
-EXTRA_ARGS_SLUG=${EXTRA_ARGS// /_}
-VIS=false
-
+EXTRA_START=4
 for i in "$@"
 do
 case $i in
   -vis)
     VIS=true
+    EXTRA_START=5
     ;;
   *)
     ;;
 esac
 done
+
+array=( $@ )
+len=${#array[@]}
+EXTRA_ARGS=${array[@]:$EXTRA_START:$len}
+EXTRA_ARGS_SLUG=${EXTRA_ARGS// /_}
+
 
 case ${DATASET} in
   pascal_voc)
