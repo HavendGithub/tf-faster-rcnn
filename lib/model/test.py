@@ -270,9 +270,10 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
         # Add the patch to the Axes
         ax.add_patch(rect)    
 
-    plt.show()
-    
-    raw_input("Press Enter to continue to the next image...")
+    if visualization == 'true':
+      plt.show()
+      
+      raw_input("Press Enter to continue to the next image...")
     
     plt.close()
 
