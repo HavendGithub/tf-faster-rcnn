@@ -10,7 +10,7 @@ DATASET=$2
 NET=$3
 IMGFOLDER=$4
 
-if [ "$#" < 4 ]; then
+if [ "$#" -lt 4 ]; then
     echo "Illegal number of parameters"
 fi
 
