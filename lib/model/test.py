@@ -262,7 +262,8 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
     fig,ax = plt.subplots(1)  
     
     # Display the image
-    ax.imshow(im)  
+    im_RGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+    ax.imshow(im_RGB)  
 
     # Create a Rectangle patches
     for j in range(1, imdb.num_classes):
