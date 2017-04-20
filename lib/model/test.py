@@ -328,7 +328,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
     for type_name in ['articulated_truck', 'bus', 'car',
                       'motorized_vehicle', 'pickup_truck',
                      'single_unit_truck', 'work_van']:
-      car_type_idx.append(imdb._class_to_ind(type_name))
+      car_type_idx.append(imdb._class_to_ind[type_name])
 
     car_scores = np.array([]).reshape((0, 1))
     car_boxes = np.array([]).reshape((0,4))
