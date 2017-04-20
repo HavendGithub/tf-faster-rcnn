@@ -41,7 +41,7 @@ def parse_args():
   parser.add_argument('--vis', dest='vis',
             help='visualization mode', default=None,
             type=str)
-  parser.add_argument('--caronly', dest='car_only', const=True,
+  parser.add_argument('--caronly', dest='car_only', const=True, action='store_const',
             default=False, type=bool, help='choose to detect cars only')
   parser.add_argument('--tag', dest='tag',
                         help='tag of the model',
