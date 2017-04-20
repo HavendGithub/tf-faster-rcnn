@@ -299,7 +299,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
 
   # set the image length to be number of images in the folder
   imgfiles = [join(image_folder, f) for f in listdir(image_folder) if (isfile(join(image_folder, f)) and f[-3:]=='jpg')]
-  if visualization=='false':
+  if visualization=='false' and not save_to_file:
     os.makedirs(image_folder+'_detected')
     savefiles = [join(image_folder+'_detected', f) for f in listdir(image_folder) if (isfile(join(image_folder, f)) and f[-3:]=='jpg')]
   num_images = len(imgfiles)
