@@ -406,6 +406,6 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
 
   # close file after loop   
   T.toc()
-  print 'It takes {:.3f}s to detect {:d} images'.format(T.diff, num_images) 
+  print('It takes {:.3f}s to detect {:d} images'.format(T.diff, num_images))
   if save_to_file:
     writef.close()
