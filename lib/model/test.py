@@ -292,7 +292,8 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
   # imdb.evaluate_detections(all_boxes, output_dir)
 
 
-def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_per_image=100, thresh=0.05, visualization='false'):
+RESULT_FILE_NAME = '/home/wenxi/tensorflow_frcnn_detection_results.txt'
+def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_per_image=100, thresh=0.05, visualization='false', save_to_file=False):
   np.random.seed(cfg.RNG_SEED)
   """Test a Fast R-CNN network on an image database."""
 
@@ -313,6 +314,10 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
   # timers
   _t = {'im_detect' : Timer(), 'misc' : Timer()}
 
+  if save_to_file:
+    writef = open(RESULT_FILE_NAME, 'w')
+    T = Timer()
+    T.tic()
   for i in range(num_images):
     im = cv2.imread(imgfiles[i])
 
@@ -362,26 +367,41 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
 
     #TODO: plot the image with detections
     # Create figure and axes
-    fig,ax = plt.subplots(1)  
-    
-    # Display the image
-    im_RGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    ax.imshow(im_RGB)  
+    if not save_to_file:
+      fig,ax = plt.subplots(1)  
+      
+      # Display the image
+      im_RGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+      ax.imshow(im_RGB)  
 
     # Create a Rectangle patches
     for j in range(1, imdb.num_classes):
       for det in all_boxes[j][i]:
         bbox = det[:4]
-        rect = patches.Rectangle((bbox[0],bbox[1]),bbox[2]-bbox[0],bbox[3]-bbox[1],linewidth=1,edgecolor='r',facecolor='none')
-        ax.text(bbox[0], bbox[1], 'car :'+str(det[4]), fontdict={'color':'blue'})
-        # Add the patch to the Axes
-        ax.add_patch(rect)    
+        if save_to_file:
+          imgfile_name = imgfiles[i]
+          extra_info = []
+          info_L = imgfile_name.split('_')
+          img_time = info_L[-1]
+          img_time = img_time[:-4]
+          img_time = img_time.replace('+', ':')
+          info_L = info_L[-2].split('/')
+          camid = info_L[-1]
+          writef.write('{}, {:d}, {:d}, {:d}, {:d}, {:d}\n'.format(img_time, int(camid), bbox[0], bbox[1], bbox[2], bbox[3]))
+        else:
+          rect = patches.Rectangle((bbox[0],bbox[1]),bbox[2]-bbox[0],bbox[3]-bbox[1],linewidth=1,edgecolor='r',facecolor='none')
+          ax.text(bbox[0], bbox[1], 'car :'+str(det[4]), fontdict={'color':'blue'})
+          # Add the patch to the Axes
+          ax.add_patch(rect)
 
-    if visualization == 'true':
-      plt.show()
-      
-      raw_input("Press Enter to continue to the next image...")
+    if save_to_file:
+      writef.close()
     else:
-      plt.savefig(savefiles[i])
+      if visualization == 'true':
+        plt.show()
+        
+        raw_input("Press Enter to continue to the next image...")
+      else:
+        plt.savefig(savefiles[i])
     
-    plt.close()
+      plt.close()

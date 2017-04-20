@@ -118,8 +118,9 @@ if __name__ == '__main__':
     sess.run(tf.global_variables_initializer())
     print('Loaded.')
 
+  # set save_to_file to true if trying to generate test data annotation
   if args.car_only:
-    realtime_car_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5, visualization=args.vis)
+    realtime_car_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5, visualization=args.vis, save_to_file=True)
   else:
     realtime_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5, visualization=args.vis)
 
