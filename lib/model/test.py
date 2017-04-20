@@ -290,3 +290,98 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
 
   # print('Evaluating detections')
   # imdb.evaluate_detections(all_boxes, output_dir)
+
+
+def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_per_image=100, thresh=0.05, visualization='false'):
+  np.random.seed(cfg.RNG_SEED)
+  """Test a Fast R-CNN network on an image database."""
+
+  # set the image length to be number of images in the folder
+  imgfiles = [join(image_folder, f) for f in listdir(image_folder) if (isfile(join(image_folder, f)) and f[-3:]=='jpg')]
+  if visualization=='false':
+    os.makedirs(image_folder+'_detected')
+    savefiles = [join(image_folder+'_detected', f) for f in listdir(image_folder) if (isfile(join(image_folder, f)) and f[-3:]=='jpg')]
+  num_images = len(imgfiles)
+
+  # all detections are collected into:
+  #  all_boxes[cls][image] = N x 5 array of detections in
+  #  (x1, y1, x2, y2, score)
+  all_boxes = [[[] for _ in range(num_images)]
+         for _ in range(imdb.num_classes)]
+
+  # output_dir = get_output_dir(imdb, weights_filename)
+  # timers
+  _t = {'im_detect' : Timer(), 'misc' : Timer()}
+
+  for i in range(num_images):
+    im = cv2.imread(imgfiles[i])
+
+    _t['im_detect'].tic()
+    scores, boxes = im_detect(sess, net, im)
+    _t['im_detect'].toc()
+
+    _t['misc'].tic()
+
+    # skip j = 0, because it's the background class
+    # add all vihecle type into one array as car type
+    car_type_idx = []
+    for type_name in ['articulated_truck', 'bus', 'car',
+                      'motorized_vehicle', 'pickup_truck',
+                     'single_unit_truck', 'work_van']:
+      car_type_idx.append(imdb._class_to_ind(type_name))
+
+    car_scores = np.array([]).reshape((0, 1))
+    car_boxes = np.array([]).reshape((0,4))
+    for j in car_type_idx:
+      inds = np.where(scores[:, j] > thresh)[0]
+      cls_scores = scores[inds, j]
+      car_scores =  np.vstack((car_scores, cls_scores[:, np.newaxis]))
+      cls_boxes = boxes[inds, j*4:(j+1)*4]
+      car_boxes = np.vstack((car_boxes, cls_boxes))
+    # cls_dets = np.hstack((cls_boxes, cls_scores[:, np.newaxis])) \
+      # .astype(np.float32, copy=False)
+    car_dets = no.hstack((car_boxes, car_scores)).astype(np.float32, copy=False)
+    keep = nms(car_dets, cfg.TEST.NMS)
+    car_dets = car_dets[keep, :]
+    all_boxes[j][i] = car_dets
+
+    # # Limit to max_per_image detections *over all classes*
+    # if max_per_image > 0:
+    #   image_scores = np.hstack([all_boxes[j][i][:, -1]
+    #                 for j in range(1, imdb.num_classes)])
+    #   if len(image_scores) > max_per_image:
+    #     image_thresh = np.sort(image_scores)[-max_per_image]
+    #     for j in range(1, imdb.num_classes):
+    #       keep = np.where(all_boxes[j][i][:, -1] >= image_thresh)[0]
+    #       all_boxes[j][i] = all_boxes[j][i][keep, :]
+    _t['misc'].toc()
+
+    print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
+        .format(i + 1, num_images, _t['im_detect'].average_time,
+            _t['misc'].average_time))
+
+    #TODO: plot the image with detections
+    # Create figure and axes
+    fig,ax = plt.subplots(1)  
+    
+    # Display the image
+    im_RGB = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+    ax.imshow(im_RGB)  
+
+    # Create a Rectangle patches
+    for j in range(1, imdb.num_classes):
+      for det in all_boxes[j][i]:
+        bbox = det[:4]
+        rect = patches.Rectangle((bbox[0],bbox[1]),bbox[2]-bbox[0],bbox[3]-bbox[1],linewidth=1,edgecolor='r',facecolor='none')
+        ax.text(bbox[0], bbox[1], 'car :'+str(det[4]), fontdict={'color':'blue'})
+        # Add the patch to the Axes
+        ax.add_patch(rect)    
+
+    if visualization == 'true':
+      plt.show()
+      
+      raw_input("Press Enter to continue to the next image...")
+    else:
+      plt.savefig(savefiles[i])
+    
+    plt.close()

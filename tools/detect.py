@@ -41,6 +41,8 @@ def parse_args():
   parser.add_argument('--vis', dest='vis',
             help='visualization mode', default=None,
             type=str)
+  parser.add_argument('--caronly', dest='car_only', const=True,
+            default=False, type=bool, help='choose to detect cars only')
   parser.add_argument('--tag', dest='tag',
                         help='tag of the model',
                         default='', type=str)
@@ -116,6 +118,9 @@ if __name__ == '__main__':
     sess.run(tf.global_variables_initializer())
     print('Loaded.')
 
-  realtime_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5, visualization=args.vis)
+  if args.car_only:
+    realtime_car_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5, visualization=args.vis)
+  else:
+    realtime_detection(sess, net, imdb, args.img_folder, filename, max_per_image=args.max_per_image, thresh=0.5, visualization=args.vis)
 
   sess.close()
