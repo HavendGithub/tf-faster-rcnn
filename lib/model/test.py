@@ -362,8 +362,8 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
     _t['misc'].toc()
 
     print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
-        .format(i + 1, num_images, _t['im_detect'].average_time,
-            _t['misc'].average_time))
+        .format(i + 1, num_images, _t['im_detect'].diff,
+            _t['misc'].diff))
 
     #TODO: plot the image with detections
     # Create figure and axes
