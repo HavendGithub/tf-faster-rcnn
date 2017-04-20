@@ -387,7 +387,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
           img_time = img_time.replace('+', ':')
           info_L = info_L[-2].split('/')
           camid = info_L[-1]
-          writef.write('{}, {:d}, {:d}, {:d}, {:d}, {:d}\n'.format(img_time, int(camid), bbox[0], bbox[1], bbox[2], bbox[3]))
+          writef.write('{}, {:d}, {:d}, {:d}, {:d}, {:d}\n'.format(img_time, int(camid), int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])))
         else:
           rect = patches.Rectangle((bbox[0],bbox[1]),bbox[2]-bbox[0],bbox[3]-bbox[1],linewidth=1,edgecolor='r',facecolor='none')
           ax.text(bbox[0], bbox[1], 'car :'+str(det[4]), fontdict={'color':'blue'})
