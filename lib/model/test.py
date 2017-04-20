@@ -340,7 +340,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
       car_boxes = np.vstack((car_boxes, cls_boxes))
     # cls_dets = np.hstack((cls_boxes, cls_scores[:, np.newaxis])) \
       # .astype(np.float32, copy=False)
-    car_dets = no.hstack((car_boxes, car_scores)).astype(np.float32, copy=False)
+    car_dets = np.hstack((car_boxes, car_scores)).astype(np.float32, copy=False)
     keep = nms(car_dets, cfg.TEST.NMS)
     car_dets = car_dets[keep, :]
     all_boxes[j][i] = car_dets
