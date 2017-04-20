@@ -394,9 +394,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
           # Add the patch to the Axes
           ax.add_patch(rect)
 
-    if save_to_file:
-      writef.close()
-    else:
+    if not save_to_file:
       if visualization == 'true':
         plt.show()
         
@@ -405,3 +403,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
         plt.savefig(savefiles[i])
     
       plt.close()
+
+  # close file after loop    
+  if save_to_file:
+    writef.close()
