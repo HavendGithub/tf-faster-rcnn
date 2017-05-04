@@ -93,7 +93,8 @@ if [[ ! -z  ${EXTRA_ARGS_SLUG}  ]]; then
     --net ${NET} \
     --imgfolder ${IMGFOLDER} \
     --vis ${VIS} \
-    --caronly \
+# uncomment this if you want to do quantative test
+#    --caronly \
     --set ${EXTRA_ARGS}
 
 else
@@ -105,7 +106,8 @@ else
     --net ${NET} \
     --imgfolder ${IMGFOLDER} \
     --vis ${VIS} \
-    --caronly \
+# uncomment this if you want to do quantative test
+#    --caronly \
     --set ${EXTRA_ARGS}
     
 fi
