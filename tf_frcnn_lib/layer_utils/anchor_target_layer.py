@@ -11,7 +11,7 @@ import os
 from model.config import cfg
 import numpy as np
 import numpy.random as npr
-from utils.cython_bbox import bbox_overlaps
+from tf_utils.cython_bbox import bbox_overlaps
 from model.bbox_transform import bbox_transform
 
 

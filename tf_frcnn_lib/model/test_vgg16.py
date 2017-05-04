@@ -10,10 +10,10 @@ import cPickle
 import os
 import math
 
-from utils.timer import Timer
-from utils.cython_nms import nms, nms_new
-from utils.boxes_grid import get_boxes_grid
-from utils.blob import im_list_to_blob
+from tf_utils.timer import Timer
+from tf_utils.cython_nms import nms, nms_new
+from tf_utils.boxes_grid import get_boxes_grid
+from tf_utils.blob import im_list_to_blob
 
 from model.config import cfg, get_output_dir
 from model.bbox_transform import clip_boxes, bbox_transform_inv

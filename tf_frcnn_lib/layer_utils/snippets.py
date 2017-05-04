@@ -12,7 +12,7 @@ import numpy.random as npr
 from model.config import cfg
 from layer_utils.generate_anchors import generate_anchors
 from model.bbox_transform import bbox_transform_inv, clip_boxes
-from utils.cython_bbox import bbox_overlaps
+from tf_utils.cython_bbox import bbox_overlaps
 
 
 def generate_anchors_pre(height, width, feat_stride, anchor_scales):

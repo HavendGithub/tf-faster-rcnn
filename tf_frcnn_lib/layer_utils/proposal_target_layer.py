@@ -11,7 +11,7 @@ import numpy as np
 import numpy.random as npr
 from model.config import cfg
 from model.bbox_transform import bbox_transform
-from utils.cython_bbox import bbox_overlaps
+from tf_utils.cython_bbox import bbox_overlaps
 
 
 def proposal_target_layer(rpn_rois, rpn_scores, gt_boxes, _num_classes):

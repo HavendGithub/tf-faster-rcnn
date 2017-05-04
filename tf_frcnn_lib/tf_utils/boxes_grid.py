@@ -38,7 +38,7 @@ def get_boxes_grid(image_height, image_width):
     width = np.floor(width / 2.0 + 0.5)
     width = np.floor(width / 2.0 + 0.5)
   else:
-    assert (1), 'The network architecture is not supported in utils.get_boxes_grid!'
+    assert (1), 'The network architecture is not supported in tf_utils.get_boxes_grid!'
 
   # compute the grid box centers
   h = np.arange(height)
