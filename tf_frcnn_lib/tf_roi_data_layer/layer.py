@@ -11,7 +11,7 @@ RoIDataLayer implements a Caffe Python layer.
 """
 
 from model.config import cfg
-from roi_data_layer.minibatch import get_minibatch
+from tf_roi_data_layer.minibatch import get_minibatch
 import numpy as np
 import time
 

@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
   cfg.TRAIN.PROPOSAL_METHOD = 'gt'
 
-  # TODO: may need to look more closely at roi_data_layer.roidb
+  # TODO: may need to look more closely at tf_roi_data_layer.roidb
   imdb, roidb = combined_roidb('deep_fashion_general_train')
   print('{:d} roidb entries'.format(len(roidb)))
 

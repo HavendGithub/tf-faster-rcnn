@@ -5,8 +5,8 @@
 # --------------------------------------------------------
 
 from model.config import cfg
-import roi_data_layer.roidb as rdl_roidb
-from roi_data_layer.layer import RoIDataLayer
+import tf_roi_data_layer.roidb as rdl_roidb
+from tf_roi_data_layer.layer import RoIDataLayer
 from tf_utils.timer import Timer
 import cPickle
 import numpy as np
