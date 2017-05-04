@@ -3,10 +3,10 @@
 output
 experiments/logs
 tensorboard
-lib/build
-lib/pycocotools
-lib/pycocotools/_mask.c
-lib/pycocotools/_mask.so
+tf_frcnn_lib/build
+tf_frcnn_lib/pycocotools
+tf_frcnn_lib/pycocotools/_mask.c
+tf_frcnn_lib/pycocotools/_mask.so
 .idea
 *.DS_Store
 data/faster_rcnn_models/*

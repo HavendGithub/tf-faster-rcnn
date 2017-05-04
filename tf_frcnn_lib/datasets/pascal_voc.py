@@ -313,7 +313,7 @@ class pascal_voc(imdb):
     print('-----------------------------------------------------')
     print('Computing results with the official MATLAB eval code.')
     print('-----------------------------------------------------')
-    path = os.path.join(cfg.ROOT_DIR, 'lib', 'datasets',
+    path = os.path.join(cfg.ROOT_DIR, 'tf_frcnn_lib', 'datasets',
                         'VOCdevkit-matlab-wrapper')
     cmd = 'cd {} && '.format(path)
     cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)

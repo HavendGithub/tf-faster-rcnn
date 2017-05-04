@@ -40,7 +40,7 @@ Additional features not mentioned in the [report](https://arxiv.org/pdf/1702.021
 
 2. Update your -arch in setup script to match your GPU
   ```Shell
-  cd tf-faster-rcnn/lib
+  cd tf-faster-rcnn/tf_frcnn_lib
   vim setup.py
   # Check the GPU architecture, if you are using Maxwell arch, please switch to sm_61
   ```
