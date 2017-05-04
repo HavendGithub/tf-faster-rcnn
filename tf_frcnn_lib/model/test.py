@@ -16,7 +16,7 @@ import os
 import math
 
 from tf_utils.timer import Timer
-from tf_utils.cython_nms import nms, nms_new
+from tf_utils.cython_nms import tf_nms, nms_new
 from tf_utils.boxes_grid import get_boxes_grid
 from tf_utils.blob import im_list_to_blob
 
@@ -138,7 +138,7 @@ def apply_nms(all_boxes, thresh):
       if dets == []:
         continue
 
-      keep = nms(dets, thresh)
+      keep = tf_nms(dets, thresh)
       if len(keep) == 0:
         continue
       nms_boxes[cls_ind][im_ind] = dets[keep, :].copy()
@@ -174,7 +174,7 @@ def test_net(sess, net, imdb, weights_filename, max_per_image=100, thresh=0.05):
       cls_boxes = boxes[inds, j*4:(j+1)*4]
       cls_dets = np.hstack((cls_boxes, cls_scores[:, np.newaxis])) \
         .astype(np.float32, copy=False)
-      keep = nms(cls_dets, cfg.TEST.NMS)
+      keep = tf_nms(cls_dets, cfg.TEST.NMS)
       cls_dets = cls_dets[keep, :]
       all_boxes[j][i] = cls_dets
 
@@ -238,7 +238,7 @@ def realtime_detection(sess, net, imdb, image_folder, weights_filename, max_per_
       cls_boxes = boxes[inds, j*4:(j+1)*4]
       cls_dets = np.hstack((cls_boxes, cls_scores[:, np.newaxis])) \
         .astype(np.float32, copy=False)
-      keep = nms(cls_dets, cfg.TEST.NMS)
+      keep = tf_nms(cls_dets, cfg.TEST.NMS)
       cls_dets = cls_dets[keep, :]
       all_boxes[j][i] = cls_dets
 
@@ -346,7 +346,7 @@ def realtime_car_detection(sess, net, imdb, image_folder, weights_filename, max_
     # cls_dets = np.hstack((cls_boxes, cls_scores[:, np.newaxis])) \
       # .astype(np.float32, copy=False)
     car_dets = np.hstack((car_boxes, car_scores)).astype(np.float32, copy=False)
-    keep = nms(car_dets, cfg.TEST.NMS)
+    keep = tf_nms(car_dets, cfg.TEST.NMS)
     car_dets = car_dets[keep, :]
     all_boxes[j][i] = car_dets
 

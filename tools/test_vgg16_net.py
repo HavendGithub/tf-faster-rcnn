@@ -1,7 +1,7 @@
 import _init_paths
 from model.test_vgg16 import test_net
 from model.config import cfg, cfg_from_file, cfg_from_list
-from datasets.factory import get_imdb
+from tf_datasets.factory import get_imdb
 import argparse
 import pprint
 import time, os, sys

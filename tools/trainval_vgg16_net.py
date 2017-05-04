@@ -8,8 +8,8 @@
 import _init_paths
 from model.train_val_vgg16 import get_training_roidb, train_net
 from model.config import cfg, cfg_from_file, cfg_from_list, get_output_dir, get_output_tb_dir
-from datasets.factory import get_imdb
-import datasets.imdb
+from tf_datasets.factory import get_imdb
+import tf_datasets.imdb
 import argparse
 import pprint
 import numpy as np
@@ -70,7 +70,7 @@ def combined_roidb(imdb_names):
         for r in roidbs[1:]:
             roidb.extend(r)
         tmp = get_imdb(imdb_names.split('+')[1])
-        imdb = datasets.imdb.imdb(imdb_names, tmp.classes)
+        imdb = tf_datasets.imdb.imdb(imdb_names, tmp.classes)
     else:
         imdb = get_imdb(imdb_names)
     return imdb, roidb

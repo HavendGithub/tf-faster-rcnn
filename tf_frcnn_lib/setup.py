@@ -113,18 +113,18 @@ ext_modules = [
     ),
     Extension(
         "tf_utils.cython_nms",
-        ["tf_utils/nms.pyx"],
+        ["tf_utils/tf_nms.pyx"],
         extra_compile_args={'gcc': ["-Wno-cpp", "-Wno-unused-function"]},
         include_dirs = [numpy_include]
     ),
     Extension(
-        "nms.cpu_nms",
-        ["nms/cpu_nms.pyx"],
+        "tf_nms.cpu_nms",
+        ["tf_nms/cpu_nms.pyx"],
         extra_compile_args={'gcc': ["-Wno-cpp", "-Wno-unused-function"]},
         include_dirs = [numpy_include]
     ),
-    Extension('nms.gpu_nms',
-        ['nms/nms_kernel.cu', 'nms/gpu_nms.pyx'],
+    Extension('tf_nms.gpu_nms',
+        ['tf_nms/nms_kernel.cu', 'tf_nms/gpu_nms.pyx'],
         library_dirs=[CUDA['lib64']],
         libraries=['cudart'],
         language='c++',

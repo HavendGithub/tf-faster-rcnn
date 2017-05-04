@@ -7,7 +7,7 @@
 
 import numpy as np
 
-def nms(dets, thresh):
+def tf_nms(dets, thresh):
     x1 = dets[:, 0]
     y1 = dets[:, 1]
     x2 = dets[:, 2]

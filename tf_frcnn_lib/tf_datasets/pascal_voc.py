@@ -9,8 +9,8 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-from datasets.imdb import imdb
-import datasets.ds_utils as ds_utils
+from tf_datasets.imdb import imdb
+import tf_datasets.ds_utils as ds_utils
 import xml.etree.ElementTree as ET
 import numpy as np
 import scipy.sparse
@@ -313,7 +313,7 @@ class pascal_voc(imdb):
     print('-----------------------------------------------------')
     print('Computing results with the official MATLAB eval code.')
     print('-----------------------------------------------------')
-    path = os.path.join(cfg.ROOT_DIR, 'tf_frcnn_lib', 'datasets',
+    path = os.path.join(cfg.ROOT_DIR, 'tf_frcnn_lib', 'tf_datasets',
                         'VOCdevkit-matlab-wrapper')
     cmd = 'cd {} && '.format(path)
     cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
@@ -346,7 +346,7 @@ class pascal_voc(imdb):
 
 
 if __name__ == '__main__':
-  from datasets.pascal_voc import pascal_voc
+  from tf_datasets.pascal_voc import pascal_voc
 
   d = pascal_voc('trainval', '2007')
   res = d.roidb

@@ -11,10 +11,10 @@ from __future__ import division
 from __future__ import print_function
 
 __sets = {}
-from datasets.pascal_voc import pascal_voc
-from datasets.coco import coco
-from datasets.mio_tcd_loc import mio_tcd_loc
-from datasets.deep_fashion_general import deep_fashion_general
+from tf_datasets.pascal_voc import pascal_voc
+from tf_datasets.coco import coco
+from tf_datasets.mio_tcd_loc import mio_tcd_loc
+from tf_datasets.deep_fashion_general import deep_fashion_general
 
 import numpy as np
 

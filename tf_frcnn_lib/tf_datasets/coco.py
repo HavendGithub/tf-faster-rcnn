@@ -7,8 +7,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from datasets.imdb import imdb
-import datasets.ds_utils as ds_utils
+from tf_datasets.imdb import imdb
+import tf_datasets.ds_utils as ds_utils
 from model.config import cfg
 import os.path as osp
 import sys

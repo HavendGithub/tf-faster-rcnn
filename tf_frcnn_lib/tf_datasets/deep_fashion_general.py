@@ -4,8 +4,8 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-from datasets.imdb import imdb
-import datasets.ds_utils as ds_utils
+from tf_datasets.imdb import imdb
+import tf_datasets.ds_utils as ds_utils
 import xml.etree.ElementTree as ET
 import numpy as np
 import scipy.sparse
@@ -17,25 +17,21 @@ import uuid
 from .voc_eval import voc_eval
 from model.config import cfg
 
-import csv
 import sys
 
 # ANNO_FILE = 'gt_train.csv'
-ANNO_FILE = 'partial_gt_train.csv'
+ANNO_FILE = 'Anno/list_bbox.txt'
 
-class mio_tcd_loc(imdb):
+class deep_fashion_general(imdb):
   def __init__(self, image_set, devkit_path=None):
-    imdb.__init__(self, 'mio_tcd_loc_'+image_set)
+    imdb.__init__(self, 'deep_fashion_general_'+image_set)
 #     self._year = year
     self._image_set = image_set
     self._devkit_path = self._get_default_path() if devkit_path is None \
       else devkit_path
-    self._data_path = os.path.join(self._devkit_path, 'MIO-TCD-Localization')
+    self._data_path = os.path.join(self._devkit_path, 'deep-fashion-general')
     self._classes = ('__background__',  # always index 0
-                     'articulated_truck', 'bicycle', 'bus', 'car',
-                     'motorcycle', 'motorized_vehicle', 
-                     'non-motorized_vehicle', 'pedestrian', 'pickup_truck',
-                     'single_unit_truck', 'work_van')
+                     'clothes')
     self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
     self._image_ext = '.jpg'
     self._image_index = self._load_image_set_index()
@@ -54,27 +50,30 @@ class mio_tcd_loc(imdb):
                    'min_size': 2}
 
     assert os.path.exists(self._devkit_path), \
-      'MIO-TCD parent folder path does not exist: {}'.format(self._devkit_path)
+      'deepfashion parent folder path does not exist: {}'.format(self._devkit_path)
     assert os.path.exists(self._data_path), \
       'Path does not exist: {}'.format(self._data_path)
 
+
+  #TODO: may need to update this
   def image_path_at(self, i):
     """
     Return the absolute path to image i in the image sequence.
     """
     return self.image_path_from_index(self._image_index[i])
 
+
   def image_path_from_index(self, index):
     """
     Construct an image path from the image's "index" identifier.
     """
     # TODO: might need to adjust for testing
-    image_path = os.path.join(self._data_path, 'train',
-                              index + self._image_ext)
+    image_path = os.path.join(self._data_path, 'Img', index)
     assert os.path.exists(image_path), \
       'Path does not exist: {}'.format(image_path)
     return image_path
 
+  
   def _load_image_set_index(self):
     """
     Load (and write) the indexes listed in this dataset's image set file.
@@ -90,26 +89,28 @@ class mio_tcd_loc(imdb):
       print('{} image index loaded from {}'.format(self.name, cache_file))
       print('image_index has length {}'.format(len(image_index)))
       return image_index
+      
 
     # Example path to image set file:
-    # self._devkit_path + /MIO-TCD-Localization/gt_train.csv
+    # self._devkit_path + /deep-fashion-general/Anno/list_bbox.txt
     image_set_file = os.path.join(self._data_path, ANNO_FILE)
     assert os.path.exists(image_set_file), \
       'Path does not exist: {}'.format(image_set_file)
+    with open(image_set_file, 'r') as f:
+      image_bbox_list = f.readlines()
+    image_bbox_list = image_bbox_list[2:]
     image_index = []
     counter = 0
-    with open(image_set_file) as csvf:
-      freader = csv.reader(csvf, delimiter=',')
-      for row in freader:
-        if row[0].strip() not in image_index:
-          image_index.append(row[0].strip())
-        # print out process
-        counter += 1
-        if counter % 100 == 0:
-          sys.stdout.write(".")
-          if counter % 5000 == 0:
-            sys.stdout.write(str(counter/1000)+'k')
-            sys.stdout.write("\n")
+
+    for row in image_bbox_list:
+      info = row.split()
+      image_index.append(info[0])
+      counter += 1
+      if counter % 100 == 0:
+        sys.stdout.write(".")
+        if counter % 5000 == 0:
+          sys.stdout.write(str(counter/1000)+'k')
+          sys.stdout.write("\n")
           sys.stdout.flush()
     sys.stdout.write("\n")
     sys.stdout.flush() 
@@ -122,12 +123,15 @@ class mio_tcd_loc(imdb):
 
     return image_index
 
+
   def _get_default_path(self):
     """
     Return the default path where MIO-TCD-Localization is expected to be installed.
     """
     return cfg.DATA_DIR
 
+
+  # TODO: update this
   def gt_roidb(self):
     """
     Return the database of ground-truth regions of interest.
@@ -152,6 +156,7 @@ class mio_tcd_loc(imdb):
 
     return gt_roidb
 
+  # TODO: check this later
   def selective_search_roidb(self):
     """
     Return the database of selective search regions of interest.
@@ -194,6 +199,7 @@ class mio_tcd_loc(imdb):
 
     return roidb
 
+
   def _load_rpn_roidb(self, gt_roidb):
     filename = self.config['rpn_file']
     print('loading {}'.format(filename))
@@ -203,6 +209,7 @@ class mio_tcd_loc(imdb):
       box_list = pickle.load(f)
     # TODO: change create_roidb_from_box_list
     return self.create_roidb_from_box_list(box_list, gt_roidb)
+
 
   # TODO: change this function, but need to find the mat file
   def _load_selective_search_roidb(self, gt_roidb):
@@ -224,6 +231,7 @@ class mio_tcd_loc(imdb):
 
     return self.create_roidb_from_box_list(box_list, gt_roidb)
 
+
   def _load_pascal_annotation(self):
     """
     Load image and bounding boxes info from the gt file for the entire dataset
@@ -236,60 +244,37 @@ class mio_tcd_loc(imdb):
     anno_file = os.path.join(self._data_path, ANNO_FILE)
     assert os.path.exists(anno_file), \
       'Path does not exist: {}'.format(anno_file)
+    with open(anno_file, 'r') as f:
+      image_bbox_list = f.readlines()
+    image_bbox_list = image_bbox_list[2:]
     counter = 0
-    with open(anno_file) as csvf:
-      freader = csv.reader(csvf, delimiter=',')
-      last_image = ''
-      for ix, row in enumerate(freader):
-        if row[0].strip() != last_image:
-          if last_image != '':
-            gt_classes = np.array(gt_classes_L, dtype=np.int32)
-            seg_areas = np.array(seg_areas_L, dtype=np.int32)
-            overlaps = scipy.sparse.csr_matrix(overlaps)
-            L.append({'boxes': boxes,
-                      'gt_classes': gt_classes,
-                      'gt_overlaps': overlaps,
-                      'flipped': False,
-                      'seg_areas': seg_areas})
-          boxes = np.zeros((0, 4), dtype=np.uint16)
-          gt_classes_L = []
-          overlaps = np.zeros((0, self.num_classes), dtype=np.float32)
-          # "Seg" area for pascal is just the box area
-          seg_areas_L = []
-        # Make pixel indexes 0-based
-        x1 = float(row[2]) - 1
-        y1 = float(row[3]) - 1
-        x2 = float(row[4]) - 1
-        y2 = float(row[5]) - 1
-        cls = self._class_to_ind[row[1].lower().strip()]
-        boxes = np.vstack((boxes, np.array([x1, y1, x2, y2])))
-        gt_classes_L.append(cls)
-        overlap =  np.zeros((1, self.num_classes), dtype=np.float32)
-        overlap[0, cls] = 1.0
-        overlaps = np.vstack((overlaps, overlap))
-        seg_areas_L.append((x2 - x1 + 1) * (y2 - y1 + 1))
 
-        last_image = row[0].strip()
-
-        # processing feedback
-        counter += 1
-        if counter % 100 == 0:
-          sys.stdout.write(".")
-          if counter % 5000 == 0:
-            sys.stdout.write(str(counter/1000)+'k')
-            sys.stdout.write("\n")
-          sys.stdout.flush()
-      sys.stdout.write("\n")
-      sys.stdout.flush() 
-
-      gt_classes = np.array(gt_classes_L, dtype=np.int32)
-      seg_areas = np.array(seg_areas_L, dtype=np.int32)
-      overlaps = scipy.sparse.csr_matrix(overlaps)
-      L.append({'boxes': boxes,
-                'gt_classes': gt_classes,
-                'gt_overlaps': overlaps,
+    for row in image_bbox_list:
+      info = row.split()
+      x1 = float(info[1]) - 1
+      y1 = float(info[2]) - 1
+      x2 = float(info[3]) - 1
+      y2 = float(info[4]) - 1
+      bbox = np.array([x1, y1, x2, y2])
+      bbox = bbox.reshape((1,4))
+      overlap =  np.zeros((1, self.num_classes), dtype=np.float32)
+      overlap[0, 1] = 1.0
+      overlap = scipy.sparse.csr_matrix(overlap)
+      seg_area = np.array([(x2 - x1 + 1) * (y2 - y1 + 1)], dtype=np.int32)
+      L.append({'boxes': bbox,
+                'gt_classes': np.array([1], dtype=np.int32),
+                'gt_overlaps': overlap,
                 'flipped': False,
-                'seg_areas': seg_areas})
+                'seg_areas': seg_area})
+      counter += 1
+      if counter % 100 == 0:
+        sys.stdout.write(".")
+        if counter % 5000 == 0:
+          sys.stdout.write(str(counter/1000)+'k')
+          sys.stdout.write("\n")
+          sys.stdout.flush()
+    sys.stdout.write("\n")
+    sys.stdout.flush() 
 
     return L
 

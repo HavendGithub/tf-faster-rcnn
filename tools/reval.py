@@ -15,7 +15,7 @@ from __future__ import print_function
 import _init_paths
 from model.test import apply_nms
 from model.config import cfg
-from datasets.factory import get_imdb
+from tf_datasets.factory import get_imdb
 import pickle
 import os, sys, argparse
 import numpy as np
