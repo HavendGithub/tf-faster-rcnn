@@ -92,7 +92,7 @@ if __name__ == '__main__':
   # tfconfig = tf.ConfigProto(allow_soft_placement=True)
   # tfconfig.gpu_options.allow_growth=True
   tfconfig = tf.ConfigProto()
-  tfconfig.gpu_options.per_process_gpu_memory_fraction = 0.4
+  tfconfig.gpu_options.per_process_gpu_memory_fraction = 0.7
 
   # init session
   sess = tf.Session(config=tfconfig)
