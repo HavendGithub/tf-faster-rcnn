@@ -1,6 +1,5 @@
 # tf-faster-rcnn
-A Tensorflow implementation of faster RCNN detection built based Xinlei Chen's tensorflow implementation. Please follow the original documentation below for prerequisite and installation.
-
+A Tensorflow implementation of faster RCNN detection built based on [Xinlei Chen's tensorflow implementation](https://github.com/endernewton/tf-faster-rcnn). Please follow the original documentation below for prerequisite and installation.
 
 ## Original Documentation
 A Tensorflow implementation of faster RCNN detection framework by Xinlei Chen (xinleic@cs.cmu.edu). This repository is based on the python Caffe implementation of faster RCNN available [here](https://github.com/rbgirshick/py-faster-rcnn).
